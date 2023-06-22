@@ -27,7 +27,7 @@ jobs:
 
       - name: Run JMeter test
         run: |
-          jmeter -n -t SummaryReport.jmx -l test-results.jtl
+          jmeter -n -t test-jmx.jmx -l test-results.jtl
 
       - name: Upload test results
         uses: actions/upload-artifact@v2
