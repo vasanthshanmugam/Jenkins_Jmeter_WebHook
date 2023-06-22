@@ -1,0 +1,36 @@
+name: JMeter Load Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  load_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Install JMeter
+        run: |
+          wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.5.tgz
+          tar -xzf apache-jmeter-5.5.tgz
+          export JMETER_HOME=$PWD/apache-jmeter-5.5
+          export PATH=$JMETER_HOME/bin:$PATH
+
+      - name: Run JMeter test
+        run: |
+          jmeter -n -t SummaryReport.jmx -l test-results.jtl
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: JMeter Test Results
+          path: test-results.jtl
